@@ -1,0 +1,76 @@
+\documentclass[10pt,a4paper,draft]{report}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\newtheorem{theorem}{Twierdzenie}
+\newenvironment{proof}{\textbf{Dowód}}
+
+\title{Algorytmy optymalizacji w statystyce}
+\begin{document}
+
+\chapter{Wstęp do optymalizacji wypukłej}
+\begin{itemize}
+\item zbiory i funkcje wypukłe
+\item subróżniczki i subgradienty
+\item stożki normalne i styczne
+\item rzutowanie
+\item operator proksymalny
+\end{itemize} 
+
+\section{Ćwiczenia}
+\begin{itemize}
+\item Znaleźć stożek normalny do wielościanu (przecięcia skończonej liczby półprzestrzeni w $\mathbb{R}^n$)
+\end{itemize}
+
+\chapter{Metody pierwszego rzędu}
+\section{Spadek gradientowy}
+Lemat
+analiza dla wypukłych
+analiza dla silnie wypukłych
+\section{Operator proksymalny}
+definicja
+proximal iteration
+
+\section{Proksymalny spadek gradientowy}
+algorytm
+lemat
+analiza
+\section{Metoda subgradientowa}
+algorytm
+analiza
+
+\section{Spadek lustrzany}
+
+Sebastian Bubeck, "Five miracles of mirror descent" na YT. Dziewięć wykładów o długości 1h każdy. Nie do końca o optymalizacji, ale dużo ciekawych informacji o MD.
+
+\chapter{Przyśpieszenie Nesterova}
+Omówimy w tym rozdziale przyśpieszenie (akcelerację) Nestorva. Jest to modyfikacja spadku gradientowego, o szybszej zbieżności do wartości optymalnej.
+\section{Algorytm i analiza}
+
+\section{Restarty}
+\chapter{Teoria dualności}
+\section{Sformułowanie}
+Omówimy teorię dualności dla ogólnych problemów optymalizacyjnych:
+\[
+\begin{array}{1}
+min f(x) \\
+g_i(x) \leq 0 \\
+h_i(x) = 0
+\end{array}
+\]
+Lagrangian \\
+Punkt siodłowy \\
+Postać dla programów liniowych
+\section{Przykłady użycia}
+Ze slajdów Tibshiraniego
+
+\chapter{Metody pierwotno-dualne}
+
+\chapter{ADMM}
+
+\chapter{Metody stochastyczne}
+
+\end{document}
