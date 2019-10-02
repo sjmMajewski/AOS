@@ -4,26 +4,257 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{aliascnt}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+
+\begin{document}
 
 \newtheorem{theorem}{Twierdzenie}
+\crefname{theorem}{theorem}{Theorems}
+\Crefname{Theorem}{Theorem}{Theorems}
+
+
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\crefname{lemma}{lemma}{lemmas}
+\Crefname{Lemma}{Lemma}{Lemmas}
+
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Wniosek}
+\aliascntresetthe{corollary}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{Corollary}{Corollary}{Corollaries}
+
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\crefname{proposition}{proposition}{propositions}
+\Crefname{Proposition}{Proposition}{Propositions}
+
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definicja}
+\aliascntresetthe{definition}
+\crefname{definition}{definition}{definitions}
+\Crefname{Definition}{Definition}{Definitions}
+
+\newaliascnt{remark}{theorem}
+\newtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+\crefname{remark}{remark}{remarks}
+\Crefname{Remark}{Remark}{Remarks}
+
+
+\newtheorem{example}[theorem]{Example}
+\crefname{example}{example}{examples}
+\Crefname{Example}{Example}{Examples}
+
+\newtheorem{problem}{Zadanie}
+\crefname{problem}{problem}{problems}
+\Crefname{Problem}{Problem}{Problems}
+
 \newenvironment{proof}{\textbf{Dowód}}
 
 \title{Algorytmy optymalizacji w statystyce}
-\begin{document}
+
 
 \chapter{Wstęp do optymalizacji wypukłej}
-\begin{itemize}
-\item zbiory i funkcje wypukłe
-\item subróżniczki i subgradienty
-\item stożki normalne i styczne
-\item rzutowanie
-\item operator proksymalny
-\end{itemize} 
 
-\section{Ćwiczenia}
-\begin{itemize}
-\item Znaleźć stożek normalny do wielościanu (przecięcia skończonej liczby półprzestrzeni w $\mathbb{R}^n$)
-\end{itemize}
+
+\section{Zbiory i funkcje wypukłe}
+
+\begin{definition}
+Podzbiór $W$ przestrzeni liniowej $L$ nad ciałem liczb rzeczywistych $\mathbb{R}$ nazywamy wypukłym wtedy i tylko wtedy, gdy dla dowolnych $x,y \in W$ oraz $\lambda \in [0,1]$ zachodzi $\lambda x + (1 - \lambda)y \in W$. 
+\end{definition}
+
+Dowody poniższych dwóch twierdzeń są niemal dokładną kopią ze skryptu do Optymalizacji 2 prof. Jana Palczewskiego \url{http://mst.mimuw.edu.pl/lecture.php?lecture=op2&part=Ch3}
+
+\begin{theorem}[Silne twierdzenie o oddzielaniu]
+Niech $U,V \subset \mathbb{R}^n$ będą niepustymi zbiorami wypukłymi, $U$ zwarty oraz $U \cap V = \emptyset$. Wówczas istnieje hiperpłaszczyzna ściśle oddzielająca $U$ i $V$, to znaczy takie $a \in \mathbb{R}^n$, że dla wszystkich $x \in U, y \in V$ zachodzi:
+\[
+a^T x < a^T y
+\]
+\end{theorem}
+\begin{proof}
+Określamy funkcję $d: U \times V \rightarrow \mathbb{R}$ wzorem $d(x,y) = ||x-y||$ dla $x \in U, y \in V$. Funkcja ta na zbiorze $U \times V$ jest ciągła, dodatnia i przyjmuje w pewnym punkcie $(x_0, y_0)$ dodatnie minimum (dowód na ćwiczeniach). Pokażemy że  $a = y_0 - x_0$ spełnia tezę zadania. Wykażemy najpierw, że $a^T y \geq a^T y_0$ dla $y \in V$. Określamy funkcję $g: [0,1] \rightarrow \mathbb{R}$
+\[
+g(t) = d(x_0, y_0 + t(y-y_0))^2
+\]
+czyli:
+\[
+g(t) = ||y_0 - x_0||_2^2 + 2t (y_0 - x_0)^T (y - y_0) + t^2 ||y-y_0||_2^2
+\]
+Z wypukłości $V$ wynika że dla $t \in [0,1]$ zachodzi $y_0 + t(y - y_0) \in V$, a zatem $g(t) \geq g(0) = d(x_0, y_0)^2$ na mocy definicji $(x_0, y_0)$. Zatem 
+\[
+g'(0) = \lim_{t \rightarrow 0} \frac{g(t) - g(0)}{t} \geq 0
+\]
+czyli $2(y_0 - x_0)^T (y - y_0) \geq 0$, co jest równoważne $a^T y \geq a^T y_0$. Analogicznie dowodzimy $a^T x \leq a^T x_0$ dla $x \in U$. Pozostaje nam sprawdzić, że $a^T x_0 < a^T y_0$, co jest jednak równoważne $||a||_2^ > 0$ a zatem jest prawdą.
+\end{proof}
+
+\begin{theorem}[Słabe twierdzenie o oddzielaniu]
+Niech $U,V \subset \mathbb{R}^n$ będą niepustymi zbiorami  wypukłymi takimi że $U \cap V = \emptyset$. Wówczas istnieje płaszczyzna oddzielająca $U$ i $V$, to znaczy istnieją $a \in \mathbb{R}^n$ takie że dla wszystkich $x \in U, y \in V$ zachodzi
+\[
+a^T x \leq a^T y
+\]
+\end{theorem}
+\begin{proof}
+Niech $C = V - U = \{ y - x: x \in U, y \in V \}$. Zbiór $C$ jest wypukły, i $0 \not\in C$. Rownoważne tezie jest znalezienie takiego $a \in \mathbb{R}^n$ że $a^T x \geq 0$ dla wszystkich $x \ in C$. Definiujemy zbiory:
+\[
+A_x = \{a \in \mathbb{R}^n : ||a||_2 = 1 , a^T x \geq 0 \}
+\]
+Wystarczy pokazać, że $\bigcap_{x \in C} A_x \neq \emptyset$
+\end{proof}
+
+Przedstawimy jeszcze bardzo użyteczny wniosek ze słabego twierdzenia o oddzielaniu, który też jest często nazywany słabym twierdzeniem o oddzielaniu.
+\begin{corollary}
+
+\end{corollary}
+
+\begin{definition} [funkcji (ściśle) wypukłej]
+Niech $W \subset L$ będzie wypukłym podzbiorem przestrzeni liniowej $L$ nad ciałem $\mathbb{R}$. Funkcję $f : W \rightarrow \mathbb{R}$ nazwiemy wypukłą, wtw. gdy dla wszystkich $x,y \in W$ oraz $\lambda \in [0,1]$ zachodzi
+\[
+f(\lambda x + (1-\lambda)y ) \leq \lambda f(x) + (1 - \lambda) f(y)
+\]
+jeśli nierówność jest ostra dla wszystkich $x \neq y$ oraz $t \in (0,1)$, funkcję nazwyamy ściśle wypukłą.
+\end{definition}
+
+\begin{definition} [funkcji silnie wypukłej]
+\[
+f(tx + (1-t)y) + mt(1-t)||x-y||_2^2 \leq tf(x) + (1-t)f(y) 
+\]
+\end{definition}
+
+\begin{definition}[Epigraf]
+Dla danej funkcji wypukłej $f : W \rightarrow \mathbb{R}$ epigrafem $f$ nazwiemy zbiór
+\[
+epi (f) = \{ (x,z) : z \geq f(x) \}
+\]
+\end{definition}
+
+Silna wypukłość jest ważną własnością. Wiele omawianych przez nas algorytmów optymalizacji funkcji wypukłych będzie zbiegać istotnie szybciej dla funkcji silnie wypukłych. Na ćwiczeniach omówimy różne przydatne własności funkcji silnie wypukłych.
+
+\begin{theorem}
+Funkcja $f$ jest wypukła wtedy i tylko wtedy gdy jej epigraf jest wypukły.
+\end{theorem}
+\begin{proof}
+Ćwiczenie.
+\end{proof}
+
+
+\section{Subgradient i subróżniczka}
+
+\begin{definition}[Subgradient]
+Dla danej funkcji wypukłej $f : W \rightarrow \mathbb{R}$ oraz $x \in W$ subgradientem $f$ w $x$ nazwiemy dowolny wektor $v$, taki że dla wszystkich $z \in W$:
+\[
+f(z) \geq f(x) + \langle v , z - x \rangle
+\]
+\end{definition}
+
+\begin{definition}[Subróżniczka]
+Subróżniczką funkcji wypukłej $f: W \rightarrow \mathbb{R}$ w $x \in W$ nazwiemy zbiór wszystkich subgradientów $f$ w $x$. Subróżniczkę $f$ w $x$ oznaczamy przez $\partial f(x)$. Formalnie:
+\[
+\partial f(x) = \{ v : \forall_{z \in W} f(z) \geq f(x) + \langle v, z - x\rangle \}
+\]
+\end{definition}
+
+\section{Stożki normalne i styczne}
+
+\begin{definition}[Stożka] Stożkiem w dowolnej przestrzeni liniowej nad $\mathbb{R}$ nazywamy dowolny zbiór $C$, taki że dla dowolnego $\lambda \geq 0$ zachodzi $x \in C \leftrightarrow \lambda x \in C$.
+\end{definition}
+
+\begin{definition}[Wektora stycznego do zbioru]
+Dla danego zbioru $S$ oraz $x \in S$, powiemy że wektor $v$ jest wektorem stycznym do $S$ w $x$, wtedy i tylko wtedy gdy  istnieje ciąg punktów $x_n \in S$, $\lim_{n \rightarrow \infty} x_n = x$, oraz ciag $\lambda_n \in \mathbb{R}_+$, taki że:
+\[
+\lim_{n \rightarrow \infty} \frac{x_n  - x}{\lambda_n} = v 
+\]
+\end{definition}
+
+\begin{theorem}
+Zbiór wszystkich wektorów stycznych do zbioru $W$ w $x$ jest domknięty oraz tworzy stożek.
+\end{theorem}
+
+
+\begin{definition}[Stożka stycznego]
+Stożkiem wektorów stycznych lub stożkiem stycznym do $W$ w $x$ nazywamy zbiór wektorów stycznych do $W$ w $x$. Często będziemy oznaczać ten zbiór przez $T_W(x)$.
+\end{definition}
+
+\begin{theorem}
+Stożek styczny do zbioru wypukłego jest zbiorem wypukłym.
+\end{theorem}
+\begin{proof}
+Ćwiczenie.
+\end{proof}
+
+\begin{theorem}
+\end{theorem}
+
+\section{Rzutowanie i operator proksymalny}
+
+\begin{definition}
+Niech $W$ będzie domkniętym podzbiorem wypukłym rzeczywistej przestrzeni Hilberta $H$. Funkcję:
+\[
+P_W(x) = argmin_{y \in W} ||x - y||_H
+\]
+\end{definition}
+\begin{theorem}
+Operator rzutowania jest dobrze zdefiniowany.
+\end{theorem}
+\begin{proof}
+Ćwiczenie
+\end{proof}
+
+
+Operator proksymlany jest pewnym uogólnieniem 
+
+
+\section{Zadania}
+\begin{problem}
+Udowodnij, że zbiór $W$ jest wypukły, wtedy i tylko wtedy gdy dla dowolnych $x_1, x_2, \ldots x_n \in W$ oraz $\lambda_1, \lambda_2, \ldots \lambda_n \in \mathbb{R}_+$, $\sum_{i=1}^n \lambda_i = 1$, zachodzi
+\[
+\sum_{i=1}^n \lambda_i x_i
+\]
+\end{problem}
+\begin{problem}
+Niech $W \in \mathbb{R}^n$ będzie zbiorem wypukłym o niepustym wnętrzu. Wówczas:
+\begin{enumerate}[a)]
+
+\item Dla dowolnego $x \in W$ oraz $x_0 \in int(W)$ odcinek łączący $x$ i $x_0$ z pominięciem jednego z punktów początkowych należy do wnętrza $W$. Formalnie, dla $\lambda \in (0, 1]$ zachodzi
+\[
+\lambda x + (1 - \lambda) x_0 \in int(W)
+\]
+
+\item $W \in cl(int(W))$
+\end{enumerate}
+\end{problem}
+\begin{problem}
+Udowodnij, że następujące stwierdzenia są równoważne:
+\begin{enumerate}[a)]
+\item Funkcja $f: W \rightarrow \mathbb{R}$ jest $\mu$-silnie wypukła
+\item Dla dowolnego $z$, funkcja $g(x) = f(x) - \frac{\mu}{2}||x-z||_2^2$ jest wypukła.
+\item Dla dowolnego $s_x \in \partial f(x)$ oraz $y \in W$ zachodzi
+\[
+f(x) \geq f(y) + s_x^T(x - y) + \frac{\mu}{2} ||x-y||_2^2
+\]
+\item
+\end{enumerate}
+
+\end{problem}
+
+\begin{problem}
+Znaleźć stożek normalny do wielościanu (przecięcia skończonej liczby półprzestrzeni w $\mathbb{R}^n$). 
+\end{problem}
+\begin{problem}
+Udowodnij że operator rzutowania jest dobrze zdefiniowany
+\end{problem}
+\begin{problem}
+Udowodnij, że funkcja jest wypukła wtedy i tylko wtedy gdy jej epigraf jest wypukły.
+\end{problem}
+
+
 
 \chapter{Metody pierwszego rzędu}
 \section{Spadek gradientowy}
@@ -42,20 +273,24 @@ analiza
 algorytm
 analiza
 
-\section{Spadek lustrzany}
+\section{Mirror descent}
 
 Sebastian Bubeck, "Five miracles of mirror descent" na YT. Dziewięć wykładów o długości 1h każdy. Nie do końca o optymalizacji, ale dużo ciekawych informacji o MD.
+
+\section{Metody stochastyczne}
 
 \chapter{Przyśpieszenie Nesterova}
 Omówimy w tym rozdziale przyśpieszenie (akcelerację) Nestorva. Jest to modyfikacja spadku gradientowego, o szybszej zbieżności do wartości optymalnej.
 \section{Algorytm i analiza}
 
 \section{Restarty}
+
+
 \chapter{Teoria dualności}
 \section{Sformułowanie}
 Omówimy teorię dualności dla ogólnych problemów optymalizacyjnych:
 \[
-\begin{array}{1}
+\begin{array}{c}
 min f(x) \\
 g_i(x) \leq 0 \\
 h_i(x) = 0
@@ -71,6 +306,5 @@ Ze slajdów Tibshiraniego
 
 \chapter{ADMM}
 
-\chapter{Metody stochastyczne}
 
 \end{document}
