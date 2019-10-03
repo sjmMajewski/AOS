@@ -104,14 +104,24 @@ a^T x \leq a^T y
 \begin{proof}
 Niech $C = V - U = \{ y - x: x \in U, y \in V \}$. Zbiór $C$ jest wypukły, i $0 \not\in C$. Rownoważne tezie jest znalezienie takiego $a \in \mathbb{R}^n$ że $a^T x \geq 0$ dla wszystkich $x \ in C$. Definiujemy zbiory:
 \[
-A_x = \{a \in \mathbb{R}^n : ||a||_2 = 1 , a^T x \geq 0 \}
+\begin{aligned}
+A_x &= \{a \in \mathbb{R}^n : ||a||_2 = 1 , a^T x \geq 0 \} \\
+B_x &= S_{n-1} \setminus A_x 
+\end{aligned}
 \]
-Wystarczy pokazać, że $\bigcap_{x \in C} A_x \neq \emptyset$
+Wystarczy pokazać, że $\bigcap_{x \in C} A_x \neq \emptyset$. Wykażemy to przez sprzeczność. Załóżmy że $\bigcap_{x \in C} A_x = \emptyset$. Wówczas $\bigcup_{x \in C} B_x = S$, zatem $\{B_x\}_{x \in C}$ jest pokryciem otwartym sfery jednostkowej $S_{n-1}$. Ponieważ sfera jest zwarta, istnieje podpokrycie skończone, czyli taki zbiór $\{x_i\}_{i=1}^k$, $x_i \in C$, że $\bigcup_{i=1}^k B_{x_i} = S$. Stąd $\bigcap_{i=1}^k A_{x_i} = \emptyset$. Niech $\hat{C}$ będzie uwypukleniem zbioru punktów $x_i$, czyli:
+\[
+\hat{C} = \left\{ \sum_{i=1}^k \lambda_i x_i : \lambda_i \geq 0, \sum_{i=1}^k \lambda_i = 1\right\} 
+\] 
+Zbiór $\hat{C}$ jest oczywiście wypukly, domkniety, oraz $\hat{C} \subseteq C$. Stąd $0 \not\in \hat{C}$, więc z silnego twierdzenia o oddzielaniu dla zbiorów $\{0\}, \hat{C}$ wnioskujemy że istnieje $a \in \mathbb{R}^n$, takie że $a^T x_i > 0$. Jednak wtedy $a / ||a||_2 \in A_{x_i}$ dla wszystkich $\{x_i\}_{i=1}^k$, co daje nam sprzeczność.
 \end{proof}
 
 Przedstawimy jeszcze bardzo użyteczny wniosek ze słabego twierdzenia o oddzielaniu, który też jest często nazywany słabym twierdzeniem o oddzielaniu.
 \begin{corollary}
-
+Niech $U,V \subseteq \mathbb{R}^n$ będą zbiorami wypukłymi takimi że $int(U) \neq \emptyset$ oraz $int(U) \cap V = \emptyset$. Wówczas istnieje hiperpłaszczyzna rozdzielająca $U$ i $V$, to znaczy takie $a \in \mathbb{R}^n$, że dla wszystkich $x \in U, y \in V$ zachodzi:
+\[
+a^T x \leq a^T y
+\]
 \end{corollary}
 
 \begin{definition} [funkcji (ściśle) wypukłej]
@@ -123,29 +133,18 @@ jeśli nierówność jest ostra dla wszystkich $x \neq y$ oraz $t \in (0,1)$, fu
 \end{definition}
 
 \begin{definition} [funkcji silnie wypukłej]
+Funkcja $f: W \rightarrow \mathbb{R}$ jest $\mu$-silnie wypukła, wtedy i tylko wtedy, gdy dla dowolnych $x,y \in W$ oraz $t \in [0,1]$ zachodzi:
 \[
-f(tx + (1-t)y) + mt(1-t)||x-y||_2^2 \leq tf(x) + (1-t)f(y) 
+f(tx + (1-t)y) + \mu t(1-t)||x-y||_2^2 \leq tf(x) + (1-t)f(y) 
 \]
 \end{definition}
 
-\begin{definition}[Epigraf]
-Dla danej funkcji wypukłej $f : W \rightarrow \mathbb{R}$ epigrafem $f$ nazwiemy zbiór
-\[
-epi (f) = \{ (x,z) : z \geq f(x) \}
-\]
-\end{definition}
-
-Silna wypukłość jest ważną własnością. Wiele omawianych przez nas algorytmów optymalizacji funkcji wypukłych będzie zbiegać istotnie szybciej dla funkcji silnie wypukłych. Na ćwiczeniach omówimy różne przydatne własności funkcji silnie wypukłych.
-
-\begin{theorem}
-Funkcja $f$ jest wypukła wtedy i tylko wtedy gdy jej epigraf jest wypukły.
-\end{theorem}
-\begin{proof}
-Ćwiczenie.
-\end{proof}
+Silna wypukłość jest ważną własnością. Wiele omawianych przez nas algorytmów optymalizacji funkcji wypukłych będzie zbiegać istotnie szybciej dla funkcji silnie wypukłych. Na ćwiczeniach omówimy różne równoważne definicje i konsekwencje silnej wypukłości.
 
 
 \section{Subgradient i subróżniczka}
+
+
 
 \begin{definition}[Subgradient]
 Dla danej funkcji wypukłej $f : W \rightarrow \mathbb{R}$ oraz $x \in W$ subgradientem $f$ w $x$ nazwiemy dowolny wektor $v$, taki że dla wszystkich $z \in W$:
@@ -160,6 +159,33 @@ Subróżniczką funkcji wypukłej $f: W \rightarrow \mathbb{R}$ w $x \in W$ nazw
 \partial f(x) = \{ v : \forall_{z \in W} f(z) \geq f(x) + \langle v, z - x\rangle \}
 \]
 \end{definition}
+
+\begin{definition}[Epigraf]
+Dla danej funkcji wypukłej $f : W \rightarrow \mathbb{R}$ epigrafem $f$ nazwiemy zbiór
+\[
+epi (f) = \{ (x,z) : z \geq f(x) \}
+\]
+\end{definition}
+
+
+\begin{theorem}
+Funkcja $f$ jest wypukła wtedy i tylko wtedy gdy jej epigraf jest wypukły.
+\end{theorem}
+\begin{proof}
+Ćwiczenie.
+\end{proof}
+
+\begin{theorem}[o hiperpłaszczyźnie podpierającej]
+Jeśli $f$ jest wypukła, to w każdym punkcie $x \in int(W)$ istnieje hiperpłaszczyzna podpierająca - to znaczy taki wektor $s_x$, że dla wszystkich $y \in W$ zachodzi:
+\[
+f(y) \geq f(x) + s_x^T (y - x)
+\]
+Innymi słowy, we wnętrzu dziedziny subróżniczka funkcji wypukłej jest niepusta.
+\end{theorem}
+\begin{proof}
+Oddzielamy słabo punkt od wnętrza epigrafu ... 
+\end{proof}
+
 
 \section{Stożki normalne i styczne}
 
@@ -231,18 +257,63 @@ Niech $W \in \mathbb{R}^n$ będzie zbiorem wypukłym o niepustym wnętrzu. Wówc
 \end{enumerate}
 \end{problem}
 \begin{problem}
-Udowodnij, że następujące stwierdzenia są równoważne:
+Udowodnij że funkcja jest wypukła wtedy i tylko wtedy gdy jej epigraf jest wypukły.
+\end{problem}
+
+\begin{problem}
+Udowodnij, że subróżniczka jest operatorem monotonicznym, to znaczy dla $s_x \in \partial f(x)$, $s_y \in \partial f(y)$ mamy:
+\[
+(s_x - s_y)^T (x - y) \geq 0
+\]
+\end{problem}
+
+\begin{problem}
+Niech $W \subseteq \mathbb{R}^n$ będzie zbiorem wypukłym o niepustym wnętrzu i niech $f : W \rightarrow \mathbb{R}$. Załóżmy że w każdym punkcie $x \in int(W)$ istnieje subgradient $f$ w $x$. Udowodnij, że funkcja $f$ jest wypukła.
+\end{problem}
+
+\begin{problem}
+Niech $W \subseteq \mathbb{R}^n$ będzie zbiorem wypukłym o niepustym wnętrzu. Udowodnij, że następujące stwierdzenia są równoważne:
 \begin{enumerate}[a)]
 \item Funkcja $f: W \rightarrow \mathbb{R}$ jest $\mu$-silnie wypukła
-\item Dla dowolnego $z$, funkcja $g(x) = f(x) - \frac{\mu}{2}||x-z||_2^2$ jest wypukła.
+\item Dla dowolnego $z \in \mathbb{R}^n$, funkcja $g(x) = f(x) - \frac{\mu}{2}||x-z||_2^2$ jest wypukła.
 \item Dla dowolnego $s_x \in \partial f(x)$ oraz $y \in W$ zachodzi
 \[
 f(x) \geq f(y) + s_x^T(x - y) + \frac{\mu}{2} ||x-y||_2^2
 \]
-\item
+\item Dla dowolnych $s_x \in \partial f(x)$, $s_y \in \partial f(y)$ zachodzi
+\[
+(s_x - s_y)^T (x - y) \geq \mu ||x-y||_2^2
+\]
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+Niech $f: W \rightarrow \mathbb{R}$ będzie funkcją $\mu$-silnie wypukłą. Udowodnij
+\begin{enumerate}[a)]
+\item Dla dowolnego $x \in W$ oraz $s_x \in \partial f(x)$ 
+\[
+\frac{1}{2} ||s_x||_2^2 \geq \mu (f(x) - f^*)
+\]
+gdzie $f^*$ jest minimum $f$ na $W$. 
+\item Dla dowolnych $s_x \in \partial f(x), s_y \in \partial f(y)$ zachodzi $||s_x - s_y||_2 \geq \mu ||x-y||_2$.
+\item 
 \end{enumerate}
 
 \end{problem}
+
+
+
+
+\begin{problem}
+Niech $W$ będzie wypukłym otwartym podzbiorem $\mathbb{R}^n$ i niech $f : W \rightarrow \mathbb{R}$ będzie klasy $C^2$
+\begin{enumerate}[a)]
+\item Udowodnij, że $f$ jest wypukła wtedy i tylko wtedy gdy dla każdego $x$ hessian $D^2 f(x)$ jest nieujemnie określony.
+\item Udowodnij, jeśli hessian jest w każdym punkcie dodatnio określony, to $f$ jest ściśle wypukła.
+\item Udowodnij, że $f$ jest $\mu$-silnie wypukła wtedy i tylko wtedy, gdy najmniejsza wartość własna hessianu w każdym punkcie jest niemniejsza niż $\mu$.
+\end{enumerate}
+\end{problem}
+
+
 
 \begin{problem}
 Znaleźć stożek normalny do wielościanu (przecięcia skończonej liczby półprzestrzeni w $\mathbb{R}^n$). 
@@ -250,9 +321,7 @@ Znaleźć stożek normalny do wielościanu (przecięcia skończonej liczby pół
 \begin{problem}
 Udowodnij że operator rzutowania jest dobrze zdefiniowany
 \end{problem}
-\begin{problem}
-Udowodnij, że funkcja jest wypukła wtedy i tylko wtedy gdy jej epigraf jest wypukły.
-\end{problem}
+
 
 
 
