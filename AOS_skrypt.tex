@@ -102,7 +102,7 @@ a^T x \leq a^T y
 \]
 \end{theorem}
 \begin{proof}
-Niech $C = V - U = \{ y - x: x \in U, y \in V \}$. Zbiór $C$ jest wypukły, i $0 \not\in C$. Rownoważne tezie jest znalezienie takiego $a \in \mathbb{R}^n$ że $a^T x \geq 0$ dla wszystkich $x \ in C$. Definiujemy zbiory:
+Niech $C = V - U = \{ y - x: x \in U, y \in V \}$. Zbiór $C$ jest wypukły, i $0 \not\in C$. Rownoważne tezie jest znalezienie takiego $a \in \mathbb{R}^n$ że $a^T x \geq 0$ dla wszystkich $x \in C$. Definiujemy zbiory:
 \[
 \begin{aligned}
 A_x &= \{a \in \mathbb{R}^n : ||a||_2 = 1 , a^T x \geq 0 \} \\
@@ -117,7 +117,7 @@ Zbiór $\hat{C}$ jest oczywiście wypukly, domkniety, oraz $\hat{C} \subseteq C$
 \end{proof}
 
 Przedstawimy jeszcze bardzo użyteczny wniosek ze słabego twierdzenia o oddzielaniu, który też jest często nazywany słabym twierdzeniem o oddzielaniu.
-\begin{corollary}
+\begin{corollary} \label{cor:weak_sep}
 Niech $U,V \subseteq \mathbb{R}^n$ będą zbiorami wypukłymi takimi że $int(U) \neq \emptyset$ oraz $int(U) \cap V = \emptyset$. Wówczas istnieje hiperpłaszczyzna rozdzielająca $U$ i $V$, to znaczy takie $a \in \mathbb{R}^n$, że dla wszystkich $x \in U, y \in V$ zachodzi:
 \[
 a^T x \leq a^T y
@@ -132,10 +132,16 @@ f(\lambda x + (1-\lambda)y ) \leq \lambda f(x) + (1 - \lambda) f(y)
 jeśli nierówność jest ostra dla wszystkich $x \neq y$ oraz $t \in (0,1)$, funkcję nazwyamy ściśle wypukłą.
 \end{definition}
 
+\begin{theorem}
+Niech $W$ będzie zbiorem o niepustym wnętrzu a $f : W \rightarrow \mathbb{R}$ niech będzie funkcją wypukłą. Wówczas $f$ jest ciągła we wnętrzu zbioru $W$.
+\end{theorem}
+Dowód powyższego twierdzenia wykracza poza ramy tego wykładu. Zainteresowanego czytelnika odsyłamy do [[...]].
+
+
 \begin{definition} [funkcji silnie wypukłej]
 Funkcja $f: W \rightarrow \mathbb{R}$ jest $\mu$-silnie wypukła, wtedy i tylko wtedy, gdy dla dowolnych $x,y \in W$ oraz $t \in [0,1]$ zachodzi:
 \[
-f(tx + (1-t)y) + \mu t(1-t)||x-y||_2^2 \leq tf(x) + (1-t)f(y) 
+f(tx + (1-t)y) + \frac{\mu t(1-t)}{2}||x-y||_2^2 \leq tf(x) + (1-t)f(y) 
 \]
 \end{definition}
 
@@ -183,7 +189,200 @@ f(y) \geq f(x) + s_x^T (y - x)
 Innymi słowy, we wnętrzu dziedziny subróżniczka funkcji wypukłej jest niepusta.
 \end{theorem}
 \begin{proof}
-Oddzielamy słabo punkt od wnętrza epigrafu ... 
+Epigraf $f$ jest zbiorem wypukłym (ćwiczenia). Ponieważ $f$ jest ciągła we wnętrzu dziedziny, to Epigraf ma również niepuste wnętrze. Weźmy kulkę domkniętą $\overline{B}(x_0, \epsilon) \subset int(W)$ i niech $z = sup_{x \in \overline{B}(x_0, \epsilon)} f(x)$. Wówczas zbiór $B(x_0, \epsilon) \times (z, \infty)$ jest otwartym zbiorem zawartym w epigrafie. Stąd możemy zastosować słabe twierdzenie o oddzielaniu \ref{cor:weak_sep} dla zbiorów $epi(f)$ oraz $\{x, f(x)\}$ dla $x \in int(W)$. Istnieje zatem niezerowe $(v, \alpha) \in \mathbb{R}^n \times \mathbb{R}$, takie że:
+\begin{equation}\label{eq:exist_subg}
+v^T y + \alpha z \leq v^T x + \alpha f(x)
+\end{equation}
+dla wszystkich $y \in W$ oraz $z \geq f(y)$. Zauważmy, że $\alpha$ nie może być dodatnie. W przeciwnym wypadku dla dowolnego $y \in W$ biorąc odpowiednio duże $z$ powyższa nierówność nie byłaby spełniona. Zatem $\alpha$ jest niedodatnie. Pokażemy przez sprzeczność, że $\alpha$ musi być ujemne. Gdyby $\alpha = 0$, to mielibyśmy $v^T(y - x) \leq 0$ dla wszystkich $y \in W$, oraz dla $v \neq 0$ (bo słabe twierdzenie o oddzielaniu daje nam niezerową parę $(v, \alpha)$). Jednak ponieważ $x$ należy do wnętrza $W$, to dla dostatecznie małego dodatniego $\epsilon$ punkt $y = x + \epsilon v$ również należy do $W$. Stąd mamy $0 \geq v^T(y - x) = ||v||_2^2$, co implikuje $v = 0$ i daje sprzeczność. Zatem $\alpha$ jest liczbą ujemną, i po podzieleniu stronami przez $\alpha$ i wstawieniu $z = f(y)$ w równaniu \ref{eq:exist_subg} otrzymujemy:
+\[
+f(y) \geq f(x) + (-v/\alpha)^T(y - x)
+\]
+Stąd wektor $-(v/\alpha)$ jest subgradientem $f$ w $x$. 
+\end{proof}
+
+\begin{theorem}
+Dla funkcji wypukłej $f : W \rightarrow \mathbb{R}$ punkt $x \in W$ jest minimum globalnym wtedy i tylko wtedy, gdy $0 \in \partial f(x)$.
+\end{theorem}
+\begin{proof}
+Z definicji subgradientu, mamy że $0 \in \partial f(x)$ wtedy i tylko wtedy, gdy dla wszystkich $y \in W$ zachodzi $f(y) \geq f(x) + 0^T(y-x) = f(x)$, czyli wtw. gdy $x$ jest minimum globalnym $f$.
+\end{proof}
+
+\begin{lemma}
+Dla $f: W \rightarrow \mathbb{R}$ wypukłej oraz $x \in W$, zbior $\partial f(x)$ jest wypukły i domknięty. Ponadto, dla $x \in int(W)$ jest również ograniczony, a więc zwarty.
+\end{lemma}
+\begin{proof}
+Udowodnimy najpierw wypukłość zbioru $\partial f(x)$. Niech $s_1, s_2 \in \partial f(x)$. Wówczas dla wszystkich $y \in W$ mamy:
+\[
+\begin{aligned}
+f(y) & \geq f(x) + s_1^T (y - x) \\
+f(y) & \geq f(x) + s_2^T (y - x)
+\end{aligned}
+\]
+Weźmy $\lambda_1, \lambda_2 \geq 0$, $\lambda_1 + \lambda_2 = 1$. Mnożąc pierwszą nierówność stronami przez $\lambda_1$, drugą przez $\lambda_2$ oraz dodając otrzymane nierówności otrzymujemy:
+\[
+(\lambda_1 + \lambda_2)f(y) \geq (\lambda_1 + \lambda_2) f(x) + (\lambda_1 s_1 + \lambda_2 s_2)^T (y - x)
+\]
+czyli:
+\[
+f(y) \geq f(x) + (\lambda_1 s_1 + \lambda_2 s_2)^T (y-x)
+\]
+dla wszystkich $y \in W$. Stąd wniosek, że $(\lambda_1 s_1 + \lambda_2 s_2) \in \partial f(x)$, a zatem zbiór $\partial f(x)$ jest wypukły.
+\\
+Przejdźmy do dowodu domkniętości. Niech $\{s_n\}_{n=1}^{\infty}$ będzie ciągiem elementów $\partial f(x)$ i niech $\lim_{n \rightarrow \infty} s_n = v$. Dla dowolnego $y \in W$ oraz $n \in \mathbb{N}$ mamy:
+\[
+f(y) \geq f(x) + s_n^T(y - x)
+\]
+przechodząc z $n$ do granicy, otrzymujemy $f(y) \geq f(x) + v^T(y - x)$ dla dowolnego $y \in W$. Stąd $v \in \partial f(x)$.
+\\
+Pozostało nam udowodnić że $\partial f(x)$ jest ograniczony, gdy $x \in int(W)$. Dla takich $x$, istnieje $\epsilon > 0$, taki że domknieta kula $B_{\epsilon} = \overline{B}(x, \epsilon)$ jest zawarta w $int(W)$. Dla dowolnego $s_x \in \partial f(x)$ zachodzi:
+\[
+f(y) \geq f(x) + s_x^T(y -x)
+\]
+dla wszystkich $ $. Stąd, biorąc stronami supremum po $y \in B_{\epsilon}$, orzymujemy:
+\[
+\sup_{y \in B_{\epsilon}} f(y) \geq f(x) + \sup_{y \in B_{\epsilon}} s_x^T (y - x)
+\]
+Ponieważ $f$ jest ciągła w zbiorze $int(W)$, to $\sup_{y \in B_{\epsilon}} f(y)$ jest skończone. Ponadto mamy 
+\[
+\sup_{y \in B_{\epsilon}} s_x^T (y - x) = \epsilon ||s_x||_2
+\]
+Stąd dla dowolnego $s_x \in \partial f(x)$ zachodzi:
+\[
+||s_x||_2 \leq \frac{1}{\epsilon} \left(\sup_{y \in B_{\epsilon}} f(y) - f(x) \right)
+\]
+zatem zbiór $\partial f(x)$ jest ograniczony.
+
+
+\end{proof}
+
+\begin{definition}
+Pochodną kierunkową funkcji $f$ w kierunku $d$ nazywamy:
+\[
+f'(x, d) = \lim_{\lambda \rightarrow 0_+} \frac{f(x + \lambda d) - f(x)}{\lambda}
+\]
+\end{definition}
+
+\begin{theorem}
+Dla funkcji wypukłej $f : W \rightarrow \mathbb{R}$ oraz punktu $x \in int(W)$ pochodna kierunkowa istnieje w każdym kierunku. Ponadto:
+\[
+f'(x,d) = \inf_{\lambda >0} \frac{f(x + \lambda d) - f(x)}{\lambda}
+\]
+\end{theorem}
+\begin{proof}
+Wykażemy, że iloraz różnicowy jest monotoniczny, to znaczy dla $0 < t_1 < t_2$, takich że $x + t_2 d \in W$, zachodzi:
+\[
+\frac{f(x + t_1 d) - f(x)}{ t_1} \leq \frac{f(x + t_2 d) - f(x)}{t_2}
+\]
+Powyższa nierówność jest równoważna:
+\[
+f(x + t_1 d) \leq \frac{t_1}{t_2} f(x + t_2 d) + \frac{(t_2 - t_1)}{t_2} f(x)
+\]
+co wynika wprost z wypukłości funkcji $f$.
+\\
+Z monotoniczności ilorazu różnicowego wnioskujemy, że:
+\[
+\lim_{\lambda \rightarrow 0_+} \frac{f(x + \lambda d) - f(x)}{\lambda} = \inf_{\lambda > 0} \frac{f(x + \lambda d) - f(x)}{\lambda}
+\]
+Pozostaje jeszcze wykazać, że to infimum jest skończone. To jednak wynika z istnienia subgradientu $f$ w $x$. Jeśli bowiem $s_x \in \partial f(x)$, to mamy $f(x + \lambda d) \geq f(x) + s_x^T(\lambda d)$, stąd:
+\[
+\frac{f(x + \lambda d) - f(x)}{\lambda} \geq s_x^T d
+\]
+co kończy dowód.
+\end{proof}
+
+\begin{theorem}
+Wektor $s_x$ jest subgradientem $f: W \rightarrow \mathbb{R}$ w $x \in int(W)$ wtedy i tylko wtedy, gdy $f'(x,d) \geq s_x^T d$ dla wszystkich $d \in \mathbb{R}^n$.
+\end{theorem}
+\begin{proof}
+Wykazaliśmy w dowodzie poprzedniego twierdzenia implikację w jedną stronę. Wystarczy dowieść, że jeśli $f'(x,d) \geq s_x^T d$ dla wszystkich $d \in \mathbb{R}^n$, to $s_x$ jest subgradientem $f$ w $x$. Z monotoniczności ilorazu różnicowego dla dowolnych $d \in \mathbb{R}^n$ oraz $\lambda > 0$, takich że $x + \lambda d \in W$, mamy:
+\[
+\frac{f(x + \lambda d) - f(x)}{\lambda} \geq f'(x,d) \geq s_x^T d
+\]
+Stąd $f(x + \lambda d) \geq f(x) + s_x^T( \lambda d)$, a zatem $f(y) \geq f(x) + s_x^T(y - x)$ dla dowolnego $y \in W$.
+\end{proof}
+
+\begin{theorem} \label{thm:dir_deriv_sup}
+Dla funkcji wypuklej $f: W \rightarrow \mathbb{R}$ określonej na otwartym zbiorze $W$, dowolnego $x \in W$ oraz $d \in \mathbb{R}^n \setminus \{0\}$ zachodzi:
+\[
+f'(x, d) = \max_{s_x \in \partial f(x)} s_x^T d 
+\]
+\end{theorem}
+\begin{proof}
+Wiemy z poprzedniego punktu, że zachodzi
+\[
+f'(x, d) \geq \sup_{s_x \in \partial f(x)} s_x^T d 
+\]
+Wykażemy nierówność w drugą stronę oraz że supremum jest przyjmowane. Niech $L = \sup \{\lambda : \lambda \geq 0, x + \lambda d \in W\}$. Określamy zbiory:
+\[
+\begin{aligned}
+C_1 &= \left\{ (y,z) : x \in W, z > f(y) \right\} \\
+C_2 &= \left\{ (y,z) : y = x + \lambda d, z = f(x) + \lambda f'(x,d), \lambda \in [0, L) \right\}
+\end{aligned}
+\]
+Zbiór $C_1$ jest wnętrzem epigrafu $f$, jest więc wypukły. Zbiór $C_2$ jest odcinkiem, zatem również jest wypukły. Ponieważ $\lambda f'(x,d) \leq f(x + \lambda d) - f(x)$, zbiory $C_1, C_2$ są rozłączne. Z twierdzenia o oddzielaniu wnioskujemy zatem, że istnieją $a \in \mathbb{R}^n$, $b \in \mathbb{R}$, $(a,b) \neq 0$, takie że:
+\begin{equation}\label{ineq:dir_deriv}
+a^T y + bz \geq a^T (x + \lambda d) + b (f(x) + \lambda f'(x,d))
+\end{equation}
+dla $(y,z) \in C_1$ oraz ($\lambda \in [0, L)$. Skalując wektor wyznaczający hiperpłaszczyznę rozdzieljącą, możemy założyć, że $b \in \{ -1, 0, 1\}$. Podobnie jak w dowodzie istnienia subgradientów, zauważamy że nie może być $b < 0$ bo wtedy biorąc odpowiednio duże $z$ nierówność \ref{ineq:dir_deriv} nie byłaby spełniona. Nie może być również $b = 0$, bo wówczas byłoby $a \neq 0$ oraz dla wszystkich $y \in W, \lambda \in [0, L)$ mielibyśmy $a^T(y - x) \geq \lambda a^T d$, co jak łatwo zauważyć nie może mieć miejsca. Zatem $b = 1$. Biorąc w nierówności \ref{ineq:dir_deriv} granice $z \rightarrow f(y)$, $\lambda \rightarrow 0$, otrzymujemy:
+\[
+f(y) \geq f(x) - a^T(y - x)
+\]
+stąd $-a \in \partial f(x)$. Jednak biorąc w nierówności \ref{ineq:dir_deriv} $y = x$, $z \rightarrow f(x)$ oraz dowolne $\lambda > 0$, otrzymujemy:
+\[
+(-a)^T( \lambda d) \geq \lambda f'(x,d)
+\]
+stąd $(-a)^T d \geq f'(x,d)$. Co dowodzi nierówności:
+\[
+f'(x,d) \leq sup_{s_x \in \partial f(x)} s_x^T d 
+\]
+oraz że istnieje element $s_x \in \partial f(x)$ dla którego $f'(x,d) = s_x^T d$. 
+\end{proof}
+
+\begin{corollary}
+Dla $f : W \rightarrow \mathbb{R}$ oraz $x \in int(W)$ funkcja $f'(x, \cdot)$ jest wypukła na $\mathbb{R}^n$ (a zatem również ciągła).
+\end{corollary}
+\begin{proof}
+Z twierdzenia \ref{thm:dir_deriv_sup} wynika, że $f'(x,\cdot)$ jest supremum funkcji liniowych (które są wypukłe). Supremum rodziny funkcji wypukłych jest funkcją wypukłą (ćwiczenia).
+\end{proof}
+
+\begin{corollary}
+Funkcja wypukła $f: W \rightarrow \mathbb{R}$ jest różniczkowalna w $x\in int(W)$ wtedy i tylko wtedy, gdy $\partial f(x)$ jest zbiorem jednoelementowym. \\ Wówczas $\partial f(x) = \{ \nabla f(x) \}$.
+\end{corollary}
+\begin{proof}
+Wykażemy najpierw, że funkcja $f$ jest różniczkowalna w $x$ wtedy i tylko wtedy, gdy funkcja $f'(x, \cdot)$ jest liniowa. Implikacja w jedną stronę jest oczywista, gdyż wiemy z analizy, że dla funkcji różniczkowalnej zachodz $f'(x,d) = \nabla f(x)^T d$. Z drugiej storny, jeśli $f'(x, d) = a^T d$ dla pewnego $a \in \mathbb{R}^n$, 
+\end{proof}
+
+
+
+\begin{theorem}
+Dla $f, g : W \rightarrow \mathbb{R}$ wypukłych, oraz $x \in int(W)$ mamy:
+\[
+\partial (f + g) (x) = \partial f(x) + \partial g(x)
+\] 
+\end{theorem}
+\begin{proof}
+Wykażemy najpierw zawieranie $\partial f(x) + \partial g(x) \subseteq \partial (f+g) (x)$  (które zachodzi nawet bez założenia $x \in int(W)$). Dla $s_f \in \partial f(x)$, $s_g \in \partial g(x)$ mamy dla wszystkich $y \in W$:
+\[
+\begin{aligned}
+f(y) & \geq f(x) + s_f^T (y - x) \\
+g(y) & \geq g(x) + s_g^T (y - x)
+\end{aligned}
+\]
+Dodając obie nierówności stronami, otrzymujemy
+\[
+(f + g)(y) \geq (f+g)(x) + (s_f + s_g)^T(y - x)
+\]
+zatem $s_f + s_g \in \partial (f+g)(x)$. \\
+Zawieranie w drugą stronę wykażemy przez sprzeczność. Załóżmy, że istnieje $s_x \in \partial (f+g)(x)$ który nie należy do $\partial f(x) + \partial g(x)$. Ponieważ $x \in int(W)$, to zbiory $\partial f(x), \partial g(x)$ są zwarte. Zatem suma Minkowskiego $\partial f(x) + \partial g(x)$ jest zwarta (i oczywiści wypukła). Możemy zastosować silne twierdzenie o oddzielaniu, dla zbiorów $\{s_x\}, (\partial f(x) + \partial g(x))$. Istnieją zatem $a \in \mathbb{R}^n, b \in \mathbb{R}$, taki że dla dowolnych $s_f \in \partial f(x)$, $s_g \in \partial g(x)$, zachodzi:
+\[
+a^T s_f + a^T s_g < b < a^T s_x 
+\]
+Przykładamy do powyższego wyrażenia $\sup_{s_f \in \partial f(x), s_g \in \partial g(x)}$ stronami. Korzystając z  \ref{thm:dir_deriv_sup} wnioskujemy, że:
+\[
+f'(x,a) + g'(x, a) \leq b < a^T s_x \leq (f+g)'(x, a)
+\]
+co daje nam sprzeczność, bo wprost z definicji pochodnej kierunkowej mamy $f'(x, a) + g'(x,a) = (f+g)'(x,a)$ dla dowolnego $x \in int(W)$.
+
 \end{proof}
 
 
@@ -193,7 +392,7 @@ Oddzielamy słabo punkt od wnętrza epigrafu ...
 \end{definition}
 
 \begin{definition}[Wektora stycznego do zbioru]
-Dla danego zbioru $S$ oraz $x \in S$, powiemy że wektor $v$ jest wektorem stycznym do $S$ w $x$, wtedy i tylko wtedy gdy  istnieje ciąg punktów $x_n \in S$, $\lim_{n \rightarrow \infty} x_n = x$, oraz ciag $\lambda_n \in \mathbb{R}_+$, taki że:
+Dla danego zbioru $S$ oraz  \\ $x\in S$, powiemy że wektor $v$ jest wektorem stycznym do $S$ w $x$, wtedy i tylko wtedy gdy  istnieje ciąg punktów $x_n \in S$, $\lim_{n \rightarrow \infty} x_n = x$, oraz ciag $\lambda_n \in \mathbb{R}_+$, taki że:
 \[
 \lim_{n \rightarrow \infty} \frac{x_n  - x}{\lambda_n} = v 
 \]
@@ -215,8 +414,66 @@ Stożek styczny do zbioru wypukłego jest zbiorem wypukłym.
 Ćwiczenie.
 \end{proof}
 
-\begin{theorem}
+\begin{definition}[Stożka dualnego] 
+Stożkiem dualnym (lub polarnym) do \\ danego zbioru $S$ nazywamy zbiór:
+\[
+S^{\circ} = \left\{ x : \forall_{y \in S} x^T y \leq 0 \right\}
+\]
+\end{definition}
+\begin{lemma}
+Dla dowolnego $S$ stożek dualny do $S$ jest domkniętym i wypukłym stożkiem.
+\end{lemma}
+
+\begin{definition}[Stożka normalnego]
+Dla zbioru $W$ oraz $x \in W$ stożkiem normalnym do $W$ w $x$ nazywamy zbiór:
+\[
+N_W(x) = \left\{ y : \forall_{z \in W} y^T (z-x) \leq 0 \right\}
+\]
+\end{definition}
+\begin{lemma}
+Dla dowolnego zbioru $W$ oraz $x \in W$, zbiór $N_W(x)$ jest stożkiem i jest domknięty.
+\end{lemma}
+\begin{proof}
+Ćwiczenie.
+\end{proof}
+
+\begin{remark}
+Zauważmy, że stożek normalny zbioru $W$ jest subróżniczką funkcji $f:W \rightarrow 0$ (lub indykatora wypukłego $W$).
+\end{remark}
+
+\begin{theorem} \label{thm:normal_tangent_dual}
+Dla zbioru wypukłego $W$ oraz $x \in W$ mamy:
+\begin{itemize}
+\item $N_W(x)^{\circ} = T_W(x)$
+\item $T_W(x)^{\circ} = N_W(x)$
+\end{itemize}
 \end{theorem}
+\begin{proof}
+Dowód na ćwiczeniach.
+\end{proof}
+
+\begin{theorem}
+Niech $V, W$ będą zbiorami wypukłymi w $\mathbb{R}^n$, $V \subset int(W)$. Wówczas $x$ jest minimum $f:W \rightarrow \mathbb{R}$ w zbiorze $V$ wtedy i tylko wtedy gdy:
+\[
+0 \in \partial f(x) + N_V(x)
+\]
+\end{theorem}
+\begin{proof}
+Załóżmy, że $0 \in \partial f(x) + N_V(x)$. Wówczas istnieje wektor $\xi \in \partial f(x)$ taki że $- \xi \in N_V(x)$. Mamy:
+\[
+f(y) \geq f(x) + \xi(y - x)
+\]
+dla wszystkich $y \in W$, oraz $-\xi^T(y - x) \leq 0$ dla $y \in V$. Stąd $f(y) \geq f(x)$ dla wszyskich $y \in V$.
+\\
+
+W drugą stronę, będziemy rozumowali przez sprzeczność. Załóżmy że $x$ jest minimum $f$ na zbiorze $V$, oraz $0 \not\in \partial f(x) + N_V(x)$.
+Zauważmy, że zbiór $\partial f(x) + N_V(x)$ jest domkniety i wypukły, jako suma zbiorów wypukłych, z których jeden jest zwarty a drugi domknięty. Stosując silne twierdzenie o oddzielaniu dla zbiorów $\partial f(x) + N_V(x)$ oraz $\{ 0 \}$, wnioskujemy że istnieje kierunek $d \in \mathbb{R}^n$, taki że :
+\[
+\sup_{y \in \partial f(x) + N_V(x)} y^T d < 0
+\]
+Musi zachodzić $y^T d \leq 0$ dla wszystkich $y \in N_V(x)$, a zatem $d \in T_V(x)$. Ponadto, mamy $\sup_{y \in \partial f(x)} y^T d < 0$, zatem $f'(x,d) < 0$. Wykazaliśmy więc, że $f'(x,d) < 0$ dla pewnego kierunku $d \in T_V(x)$.
+Zauważmy, że dla dowolnego $y \in T_V(x)$ mamy $f'(x,\lambda (y - x)) \geq 0$ dla $y \in V, \lambda > 0$. Ponieważ $T_V(x)$ jest domknięciem zbioru $\{\lambda(y - x) : y \in V, \lambda \geq 0\}$ (dowód na ćwiczeniach) a $f'(x,d)$ funkcją wypukłą (a więc i ciągłą), to $f'(x,d) \geq 0$. Otrzymana sprzeczność dowodzi, że $0 \in \partial f(x) + N_V(x)$.
+\end{proof}
 
 \section{Rzutowanie i operator proksymalny}
 
@@ -233,8 +490,60 @@ Operator rzutowania jest dobrze zdefiniowany.
 Ćwiczenie
 \end{proof}
 
+\begin{theorem}
+Niech $W$ bedzie domkniętym wypukłym zbiorem, oraz $x$ niech będize dowolne. Wówczas $x - P_W(x) \in N_W(P_W(x))$, to znaczy dla dowolnego $y \in W$ mamy:
+\[
+\langle y - P_W(x), x - P_W(x) \rangle \leq 0 
+\]
+\end{theorem}
+\begin{proof}
+Ćwiczenia?
+\end{proof}
 
-Operator proksymlany jest pewnym uogólnieniem 
+
+Operator proksymlany można rozumieć jako pewne uogólnienie operatora rzutowania.
+
+\begin{definition}
+Dla funkcji $f : W \rightarrow \mathbb{R}$ definiujemy operator proksymalny:
+\begin{equation}\label{eq:def_prox}
+prox_f(x) = argmin_{y \in W} f(y) + \frac{1}{2}||x-y||_2^2 
+\end{equation}
+\end{definition}
+
+\begin{theorem}
+Dla zbioru wypukłego domkniętego $W \subseteq \mathbb{R}^n$, niech $g = \mathds{1}_W(\cdot)$ będzie funkcją stale równą zero na zbiorze $W$ i równą nieskończoność poza nim. Wówczas:
+\[
+prox_g(x) = P_W(x)
+\]
+dla wszystkich $x \in \mathbb{R}^n$.
+\end{theorem} 
+
+\begin{theorem}
+Funkcja $prox_f$ jest dobrze określona dla funkcji wypukłych  $f : W \rightarrow \mathbb{R}$ o domkniętej dziedzinie $W$, to znaczy zbiór minimów wyrażenia po prawej stronie \ref{eq:def_prox} istnieje i jest jednoelementowy. 
+\end{theorem}
+\begin{proof}
+Dowód na ćwiczeniach.
+\end{proof}
+
+\begin{theorem}
+Dla funkcji wypukłej $f : \mathbb{R}^n \rightarrow \mathbb{R}$ zachodzi 
+\[
+y = prox_{\lambda f}(x) \leftrightarrow y \in x - \lambda \partial f(y)
+\]
+\end{theorem}
+\begin{proof}
+Funkcja $g(\cdot) = \lambda f(\cdot) + \frac{1}{2} ||x - \cdot||_2^2$ jest funkcją wypukłą, a jej subróżniczka w punkcie $z$ wynosi $z - x + \lambda \partial f(z)$. Punkt $y$ jest minimum globalnym $g(\cdot)$ wtw. gdy $0 \in \partial g (y)$, czyli wtw. gdy $0 \in y - x + \lambda \partial f(y)$, co jest równoważne tezie.
+\end{proof}
+\begin{theorem}
+Dla funkcji wypukłej $f : W \rightarrow \mathbb{R}$ zachodzi 
+\[
+y = prox_{\lambda f}(x) \leftrightarrow y \in x - \lambda \partial f(y) - N_W(y)
+\]
+\end{theorem}
+\begin{proof}
+Tak jak poprzednio, tylko korzystamy z warunków optymalności na zbiorze ograniczonym.
+\end{proof}
+
 
 
 \section{Zadania}
@@ -315,8 +624,24 @@ Niech $W$ będzie wypukłym otwartym podzbiorem $\mathbb{R}^n$ i niech $f : W \r
 
 
 
+
 \begin{problem}
-Znaleźć stożek normalny do wielościanu (przecięcia skończonej liczby półprzestrzeni w $\mathbb{R}^n$). 
+Znaleźć stożek normalny do zbioru zadanego poprzez nierówności $f_i(x) \leq 0$ dla
+\begin{enumerate}[a)]
+\item funkcji $f_i$ afinicznych
+\item funkcji $f_i$ klasy $C_1$
+\item funkcji $f_i$ wypukłych
+\end{enumerate}
+
+\end{problem}
+\begin{problem}
+Udowodnij, że dla zbioru wypukłego $W$ zbiór $T_W(x)$ jest domknięciem zbioru $\{ \lambda(y - x) : y \in W, \lambda \in \mathbb{R}, \lambda \geq 0\}$. 
+\end{problem}
+\begin{problem}
+Udowodnić twierdzenie \ref{thm:normal_tangent_dual}
+\end{problem}
+\begin{problem}
+Wykaż, że dla domknietego wypukłego stożka $S$, zachodzi $(S^{\circ})^{\circ} = S$.
 \end{problem}
 \begin{problem}
 Udowodnij że operator rzutowania jest dobrze zdefiniowany
@@ -330,7 +655,7 @@ Udowodnij że operator rzutowania jest dobrze zdefiniowany
 Lemat
 analiza dla wypukłych
 analiza dla silnie wypukłych
-\section{Operator proksymalny}
+\section{Iteracja proksymalna}
 definicja
 proximal iteration
 
