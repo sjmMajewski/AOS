@@ -13,6 +13,9 @@
 
 \begin{document}
 
+\newcommand{\rset}{\mathbb{R}}
+\newcommand{\steps}{\gamma}
+
 \newtheorem{theorem}{Twierdzenie}
 \crefname{theorem}{theorem}{Theorems}
 \Crefname{Theorem}{Theorem}{Theorems}
@@ -652,9 +655,79 @@ Udowodnij że operator rzutowania jest dobrze zdefiniowany
 
 \chapter{Metody pierwszego rzędu}
 \section{Spadek gradientowy}
-Lemat
-analiza dla wypukłych
-analiza dla silnie wypukłych
+Spadek gradientowy jest podstawowym algorytmem optymalizacji numerycznej pierwszego rzędu funkcji klasy $C^1$.
+Algorytm jest oparty na prostej intuicji - dla funkcji klasy $C^1$ gradient w punkcie $x$ jest kierunkiem najszybszego wzrostu funkcji, a minus gradient kierunkiem jej najszybszego spadku. Możemy zatem skonstruować prosty algorytm iteracyjny:
+\begin{equation} \label{eq:grad_desc_def}
+x_{k+1} = x_k - \steps_{k+1} \nabla f(x_k)
+\end{equation}
+dla pewnego $x_0$ oraz ciągu $\{\steps_{k} \}_{k=1}^{\infty}$.
+Powyższa iteracja może być rozumiana jako dyskretyzacja równania różniczkowego zwyczajnego:
+\[
+\dot{x}(t) = - \nabla f(x(t))
+\]
+Rozwiązanie powyższego równania (przy warunku początkowym $x(0) = x_0$) nazywamy potokiem gradientowym $f$ (o początku w $x_0$).
+\\
+Dla funkcji wypukłych istnieje dokładna teoretyczna analiza zbieżności algorytmu zadanego iteracją \ref{eq:grad_desc_def}, którą przedstawimy w tym podrozdziale. Zaczniemy jednak od analizy zbieżności potoku gradientowego $f$ do minimum $f$, w przypadku gdy funkcja $f$ jest wypukła. Jak się później okaże, analiza zbieżności spadku gradientowgo jest "dyskretną" wersją analizy zbieżności potoku gradientowego.
+\begin{lemma}
+Niech $W$ będzie otwartym i wpypukłym podzbiorem $\rset^n$, i niech $f : W \rightarrow \rset$ będzie funkcją $m$-silnie wypukłą klasy $C^1$. Niech $x_0 \in W$, i niech $x(t)$ będzie potokiem gradientowym o początku w $x_0$. Wówczas dla dowolnego $t > 0$ oraz $z \in W$ mamy:
+\[
+f(x(t)) - f(z) + \frac{m}{2}||x(t) - z||_2^2 \leq - \frac{d}{dt} \frac{1}{2} ||x(t) - z||_2^2
+\] 
+\end{lemma}
+\begin{proof}
+\[
+\begin{aligned}
+\frac{d}{dt} \left( \frac{1}{2}||x(t) - z||_2^2 \right) & = \langle \dot{x}(t), x(t) - z \rangle \\
+& = \langle \nabla f(x(t)), z - x(t) \rangle \\
+& \leq f(z) - f(x(t)) - \frac{m}{2}||x(t) - z||_2^2
+\end{aligned}
+\]
+\end{proof}
+\begin{lemma}
+Niech $W$ będzie otwartym i wpypukłym podzbiorem $\rset^n$, i niech $f : W \rightarrow \rset$ będzie funkcją wypukłą klasy $C^1$. Niech $x_0 \in W$, i niech $x(t)$ będzie potokiem gradientowym o początku w $x_0$. Zakładają,c że w $W$ istnieje minimum $x_*$ fukcji $f$, mamy:
+\[
+f(x(t)) - f(x_*) \leq \frac{1}{2t}||x_0 - x_*||_2^2
+\]
+\end{lemma}
+\begin{proof}
+Korzystając z poprzedniego lematu (biorąc $m=0$) i całkując od $0$ do $t$ mamy:
+\[
+2 \left( \int_0^t f(x(s)) - f(x_*) ds \right) \leq ||x_0 - x_*||_2^2 - ||x_t - x_*||_2^2  
+\]
+następnie korzystając z nierówności $f(x(s_1)) \geq f(x(s_2))$ dla $s_2 \geq s_1$ (co wynika z $d/dt f(x(t)) = - ||\nabla f(x(t))||_2^2 \leq 0$), wnioskujemy:
+\[
+2t \left( f(x(t) - f(x_*) \right) \leq ||x_0 - x_*||_2^2 - ||x_t - x_*||_2^2  
+\]
+z powyższego teza wynika bezpośrednio przez opuszczenie niedodatniego czynnika po prawej stronie i podzielenie przez $2t$ stronami.
+\end{proof}
+\begin{lemma}
+Niech $W$ będzie otwartym i wpypukłym podzbiorem $\rset^n$, i niech $f : W \rightarrow \rset$ będzie funkcją $m$-silnie wypukłą klasy $C^1$. Niech $x_0 \in W$, i niech $x(t)$ będzie potokiem gradientowym o początku w $x_0$. Zakładają,c że w $W$ istnieje minimum $x_*$ fukcji $f$, mamy:
+\[
+||x(t) - x_*||_2^2 \leq e^{-mt} ||x_0 - x_*||_2^2
+\]
+\end{lemma}
+\begin{proof}
+Ponieważ $f(x(t)) \geq f(x_*)$, mamy:
+\[
+\frac{d}{dt} ||x(t) - x_*||_2^2 \leq - m||x(t) - x_*||_2^2
+\]
+Korzystając z nierówności Gronwalla, otrzymujemy tezę.
+\end{proof}
+
+Dowód dla dyskretnej iteracji zaczniemy od dowodu następującego lematu:
+\begin{lemma}
+Niech $W$ bedzie wypukłym otwartym podzbiorem $\rset^n$. Dla funkcji $f : W \rightarrow \rset$ klasy $C^1$ (niekoniecznie wypukłej) o $L$-Lipshitzowskim gradiencie zachodzi:
+\[
+f(z) \leq f(x) + \nabla f(x)^T (y - x) + \frac{L}{2}||y - x||_2^2
+\]
+\end{lemma}
+\begin{proof}
+...
+\end{proof}
+\begin{corollary}
+Dla $\steps_{k+1} \leq \frac{1}{L}$ mamy $f(x_{k+1}) \leq f(x_k)$.
+\end{corollary}
+
 \section{Iteracja proksymalna}
 definicja
 proximal iteration
