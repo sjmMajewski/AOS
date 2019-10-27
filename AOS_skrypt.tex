@@ -481,16 +481,20 @@ Zauważmy, że dla dowolnego $y \in T_V(x)$ mamy $f'(x,\lambda (y - x)) \geq 0$ 
 \section{Rzutowanie i operator proksymalny}
 
 \begin{definition}
-Niech $W$ będzie domkniętym podzbiorem wypukłym rzeczywistej przestrzeni Hilberta $H$. Funkcję:
+Niech $W$ będzie niepustym domkniętym podzbiorem wypukłym rzeczywistej przestrzeni $\rset^n$. Funkcję:
 \[
-P_W(x) = argmin_{y \in W} ||x - y||_H
+P_W(x) = argmin_{y \in W} ||x - y||
 \]
 \end{definition}
 \begin{theorem}
-Operator rzutowania jest dobrze zdefiniowany.
+Operator rzutowania jest dobrze zdefiniowany dla niepustych, wypukłych domknietych zbiorów $W$.
 \end{theorem}
 \begin{proof}
-Ćwiczenie
+Niech $w \in W$ będzie dowolnym elementem. Zbiór $W \cap \overline{B}(0, ||x - w||)$ jest zwarty. Na tym zbiorze funkcja ciągła $h(\cdot) = ||x - \cdot||$ przyjmuje minimum, zatem $\inf_{y \in W} ||x - y||$ jest przyjmowane w jakimś punkcie. Pozostaje wykazać, że minimum jest przyjmowane tylko w jednym punkcie. Gdyby istniały dwa różne punkty $y_1, y_2 \in W$ w których minimum jest przyjmowane, mielibyśmy:
+\[
+||(y_1 + y_2)/2 - x||_2^2 < \frac{1}{2} \left( ||y_1 - x||_2^2 + ||y_2 - x||_2^2 \right)
+\]
+co daje sprzeczność.
 \end{proof}
 
 \begin{theorem}
@@ -500,7 +504,18 @@ Niech $W$ bedzie domkniętym wypukłym zbiorem, oraz $x$ niech będize dowolne. 
 \]
 \end{theorem}
 \begin{proof}
-Ćwiczenia?
+Dla dowolnego $y \in W$ mamy:
+\[
+||y - x||_2^2 \geq ||P_W(x) - x||_2^2
+\]
+Zatem:
+\[
+\langle P_W(x) - y , P_W(x) + y - 2x \rangle \leq 0
+\]
+Co można przepisać jako:
+\[
+||P_W(x) - y||_2^2 + 2 \langle P_W(x) - y , y - x \rangle \leq 0
+\]
 \end{proof}
 
 
@@ -522,7 +537,7 @@ dla wszystkich $x \in \mathbb{R}^n$.
 \end{theorem} 
 
 \begin{theorem}
-Funkcja $prox_f$ jest dobrze określona dla funkcji wypukłych  $f : W \rightarrow \mathbb{R}$ o domkniętej dziedzinie $W$, to znaczy zbiór minimów wyrażenia po prawej stronie \ref{eq:def_prox} istnieje i jest jednoelementowy. 
+Funkcja $prox_f$ jest dobrze określona dla funkcji wypukłych dolnie półciągłych $f : W \rightarrow \mathbb{R}$, to znaczy zbiór minimów wyrażenia po prawej stronie \ref{eq:def_prox} istnieje i jest jednoelementowy. 
 \end{theorem}
 \begin{proof}
 Dowód na ćwiczeniach.
@@ -728,9 +743,28 @@ f(z) \leq f(x) + \nabla f(x)^T (y - x) + \frac{L}{2}||y - x||_2^2
 Dla $\steps_{k+1} \leq \frac{1}{L}$ mamy $f(x_{k+1}) \leq f(x_k)$.
 \end{corollary}
 
+\begin{theorem}
+\[
+2\steps_{k+1} \left(f(x_{k+1} - f(z) \right) \leq ||x_k - z||_2^2 + ||x_{k+1} -z||_2^2 + (1 - \steps_{k+1}/L) ||\nabla f(x_k)||_2^2 
+\]
+\end{theorem}
+\begin{theorem}
+Analiza zbieżności dla $\steps_k \leq L^{-1}$.
+\end{theorem}
+\begin{theorem}
+Analiza zbieżności dla nierówności KŁ / QG.
+\end{theorem}
+\begin{theorem}
+Rzutowany spadek gradientowy
+\end{theorem}
 \section{Iteracja proksymalna}
-definicja
-proximal iteration
+
+\begin{theorem}
+Niech $x_{k+1} = prox_{\steps_{k+1} f} (x_k)$. Wówczas dla dowolnego $z$:
+\[
+2\steps_{k+1}(f(x_{k+1}) - f(z)) \leq ||x_k - z||_2^2 - ||x_{k+1} - z||_2^2 - ||x_{k} - x_{k+1}||_2^2
+\]
+\end{theorem}
 
 \section{Proksymalny spadek gradientowy}
 algorytm
@@ -747,7 +781,7 @@ Sebastian Bubeck, "Five miracles of mirror descent" na YT. Dziewięć wykładów
 \section{Metody stochastyczne}
 
 \chapter{Przyśpieszenie Nesterova}
-Omówimy w tym rozdziale przyśpieszenie (akcelerację) Nestorva. Jest to modyfikacja spadku gradientowego, o szybszej zbieżności do wartości optymalnej.
+
 \section{Algorytm i analiza}
 
 \section{Restarty}
@@ -767,7 +801,7 @@ Lagrangian \\
 Punkt siodłowy \\
 Postać dla programów liniowych
 \section{Przykłady użycia}
-Ze slajdów Tibshiraniego
+
 
 \chapter{Metody pierwotno-dualne}
 
