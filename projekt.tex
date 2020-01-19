@@ -1,0 +1,168 @@
+\documentclass[10pt,a4paper,draft]{report}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{aliascnt}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+
+\begin{document}
+
+\newcommand{\rset}{\mathbb{R}}
+\newcommand{\rsetd}{\mathbb{R}^d}
+\newcommand{\step}{\gamma}
+
+\newcommand{\norm}[1]{\left\Vert #1 \right\Vert}
+\newcommand{\normNuc}[1]{\left\Vert #1 \right\Vert_{*}}
+\def\prox{\operatorname{prox}}
+\def\argmin{\operatorname{argmin}}
+\def\argminl{\operatornamewithlimits{argmin}}
+\def\diag{\operatorname{diag}}
+
+\newtheorem{theorem}{Twierdzenie}
+\crefname{theorem}{theorem}{Theorems}
+\Crefname{Theorem}{Theorem}{Theorems}
+
+
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\crefname{lemma}{lemma}{lemmas}
+\Crefname{Lemma}{Lemma}{Lemmas}
+
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Wniosek}
+\aliascntresetthe{corollary}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{Corollary}{Corollary}{Corollaries}
+
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\crefname{proposition}{proposition}{propositions}
+\Crefname{Proposition}{Proposition}{Propositions}
+
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definicja}
+\aliascntresetthe{definition}
+\crefname{definition}{definition}{definitions}
+\Crefname{Definition}{Definition}{Definitions}
+
+\newaliascnt{remark}{theorem}
+\newtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+\crefname{remark}{remark}{remarks}
+\Crefname{Remark}{Remark}{Remarks}
+
+
+\newtheorem{example}[theorem]{Example}
+\crefname{example}{example}{examples}
+\Crefname{Example}{Example}{Examples}
+
+\newtheorem{problem}{Zadanie}
+\crefname{problem}{problem}{problems}
+\Crefname{Problem}{Problem}{Problems}
+
+\newenvironment{proof}{\textbf{Dowód}}
+
+\noindent W przestrzeni macierzy $\rset^{n,m}$ iloczyn skalarny jest zdefiniowany następująco:
+\[
+\langle A, B \rangle = tr(A^T B)
+\]
+dla dowolnych $A,B \in \rset^{n,m}$. Norma związana z tym iloczynem skalarnym to tzw. norma Frobeniusa:
+\[
+\norm{A}_F = \sqrt{\langle A , A \rangle}.
+\]
+Norma nuklerana macierzy $M$ jest zdefiniowana jako:
+\[
+\normNuc{M} = \sum_{i=1}^{\min(n,m)} \sigma_i(M)
+\]
+gdzie $\sigma_i(M)$ to wartości szczególne $M$. Na ćwiczeniach wspominany był fakt, o tym że norma nuklearna jest obwiednią wypukłą rzędu na zbiorze \\ $\{ A : \norm{A}_{op} \leq 1 \}$ ( co jest macierzowym analogiem faktu, że norma $l_1$ jest obwiednią wypukłą $l_0$ na zbiorze $\{x : \norm{x}_{\infty} \leq 1 \}$. Dowód można znaleźć w rodziale 5.1.5 doktoratu Maryam Fazel \cite{MFPhD}.
+
+Operator proksymalny dla normy nuklearnej jest zadany przez problem optymalizacyjny:
+\[
+\prox_{\normNuc{\cdot}}^{\step}(M) = \argminl\limits_{A \in \rset^{n,m}} \left(\normNuc{A} + \frac{1}{2\step} \norm{A - M}_F^2 \right)
+\]
+Powyższy problem ma jawne rozwiązanie. Niech $M \in \rset^{n,m}$ będzie macierzą, a $U \Sigma V$ rozkładem SVD tej macierzy. oznaczamy przez $\sigma$ diagonalę macierzy $\Sigma$. Mamy:
+\[
+\prox_{\normNuc{\cdot}}^{\step}(M) = U \left( \diag \left(S_{\step}(\sigma) \right) \right) V
+\]
+gdzie $S_{\step}$ to znany operator soft-tresholding:
+\[
+S_{\step}(x) = \left\{ 
+\begin{array}{lcl}
+x - \step && \text{dla } x > \step \\
+0 &&  \text{dla } x \in [-\step, \step] \\
+x + \step && \text{dla } x < -\step
+\end{array}
+\right.
+\]
+Innymi słowy wykonanie kroku proksymalnego dla normy nuklearnej, polega na znalezieniu jej rozkładu SVD, zaaplikowaniu operatora soft-tresholding do wektora wartości szczególnych i przemnożeniu nowej macierzy diagonalnej przez macierze $U,V$ z odpowiednio lewej i prawej strony. Dowód tego, że operator proksymalny dla normy nukleranej wygląda w ten sposob można znaleźć w rozdziale szóstym notatek \cite{notesMIT}. Udowodniony tam fakt jest nieco bardziej ogólny i dotyczy wszystkich kar macierzowych pewnej postaci, polecam przeczytać.
+
+
+\begin{problem} \label{prob:prob1} 
+Zaimplementuj funkcję $\text{prox\_normNuc}(M, step)$ obliczającą $\prox_{\normNuc{\cdot}}^{\step}(M)$ przy $\step = \text{step}$.
+\end{problem}
+
+\newpage
+\section*{Uzupełnianie macierzy}
+Problem uzupełnienia macierzy polega na znalezieniu prawdopodobnych wartości macierzy, dla której znamy wartości tylko w części komórek. TProblemy tego typu pojawiają się na przykład przy rekomendowaniu użytkownikom różnych portali nowych produktów na podstawie ich ocen. Wówczas każdy wiersz macierzy reprezentuje jednego użytkownika, a każda kolumna jeden produkt. W takiej sytuacji, w każdym wierszu większość wartości jest nieokreślonych (każdy użytkownik ocenił niewielką część produktów oferowanych przez portal). Jednocześnie uzupełnianie macierzy można potraktować jako predykcję ocen użytkowników jakie wystawiliby, gdyby spróbowali nieocenionych przez nich produktów. Na podstawie takich predykcji, można rekomendować użytkownikom nowe produkty.
+
+Intuicyjnie, pełna macierz ocen powinna być bliska macierzy niskiego rzędu. Jest to spowodowane tym, że pomimo dużej liczby użytkowników, prawdopodobnie każdego użytkownika da się zaklasyfikować do jakiejś grupy użytkowników o bardzo zbliżonych preferencjach. Z tego powodu, częstym sposobem uzupełnienia macierzy jest znalezienie macierzy niskiego rzędu której wartości są bliskie danej macierzy, w komórkach w której wartości danej macierzy są znane. 
+
+Przed sformułowaniem tej idei formalnie, wprowadzimy oznaczenie. Niech $\Omega$ będzie podzbiorem indeksów macierzy $M$, to znaczy $\Omega \subseteq \{ (i,j): 1 \leq i \leq n, 1 \leq j \leq p\}$. Dla danej macierzy $Z$ definiujemy:
+\[
+P_{\Omega}(Z) = \left\{
+\begin{array}{lcc}
+z_{i,j} & & \text{dla } (i,j) \in \Omega \\
+0 & & \text{w.p.p.}
+\end{array}
+\right.
+\]
+Mając daną macierz $M$, której niektóre komórki są puste (czyli zawierają wartość NA), możemy ją uzupełnić rozwiązując następujący problem optymalizacyjny:
+\begin{equation} \label{eq:prob_opt}
+\argminl\limits_{A \in \rset^{n,p}} \hspace{12pt} \left( \norm{P_{\Omega}(A) - P_{\Omega}(M)}_F^2 + \lambda \normNuc{A} \right) 
+\end{equation}
+gdzie $M$ to dana macierz, $\lambda$ to dany parametr a $\Omega$ to zbiór indeksów $M$ dla których $M[i,j] \neq NA$.
+
+
+\begin{problem}
+Wykorzystując funkcję z zadania \ref{prob:prob1}, zaimplementuj algorytm proximal gradient z przyspieszeniem Nesterova i backtrackingiem dla problemu \ref{eq:prob_opt}. Algorytm można znaleźć w pracy Becka \cite{beck} , w rozdziale 4 pod nazwą "FISTA with backtracking". Napisana przez Ciebie funkcja powinna być postaci:
+\[
+APG(M, lambda, start, step, beta, nsteps) 
+\]
+\noindent gdzie $M$ to dana macierz z pewnymi wartościami równymi NA, lambda to dany parametr, start to dana wartość początkowa, step to początkowa długość kroku, beta to liczba z zakresu $(0,1)$ określająca tępo zminejszania długości kroku przez backtracking, nsteps to liczba kroków. Funkcja powinna zwracać wektor (lub listę) długości nsteps, którego $k$-tym elementem jest wartość optymalizowanej funkcji po $k$ krokach.
+
+\end{problem}
+\newpage
+\begin{problem}
+Zaimplementuj algorytm ADMM dla problemu \ref{eq:prob_opt}. Napisana przez Ciebie funkcja powinna być postaci:
+\[
+ADMM(M, lambda, start, rho, nsteps)
+\]
+\noindent gdzie $M$ to dana macierz z pewnymi wartościami równymi NA, lambda to dany parametr, start to dana wartość początkowa, rho to parametr ADMM określający długość kroków. Zwracam uwagę, że krok proksymalny dla części kwadratowej jest prosty do zrobienia  bez konieczności używania consensus ADMM. Funkcja powinna zwracać wektor (lub listę) długości nsteps, którego $k$-tym elementem jest wartość optymalizowanej funkcji po $k$ krokach.
+
+\end{problem}
+
+\begin{problem}
+Napisz procedurę testującą napisane wcześniej funkcje. Procedura powinna wygenerować dane (można to zrobić w oddzielnej funkcji) i wywołać napisane wcześniej funkcje dla wybranych parametrów. Następnie należy zrobić wykres porównujący tempo zbieżności APG i ADMM przy użyciu zwróconych przez napisane wcześniej funkcje wektorów. Napisz kilka linijek komentarza na temat wyników przeprowadzonych eksperymentów.
+\end{problem}
+
+\begin{thebibliography}{1}
+
+\bibitem{MFPhD} Maryam Fazel, {\em Matrix Rank Minimization With Application} \url{https://faculty.washington.edu/mfazel/thesis-final.pdf}.
+
+\bibitem{notesMIT} S. Villa {\em Proximal methods}
+\url{http://lcsl.mit.edu/data/silviavilla/Teaching_files/20141008_mit.pdf}
+
+\bibitem{beck} Amir Beck {\em A Fast Iterative Shrinkage-Thresholding Algorithm
+for Linear Inverse Problems}
+
+\end{thebibliography}
+
+\end{document}
