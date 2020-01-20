@@ -106,7 +106,7 @@ Innymi słowy wykonanie kroku proksymalnego dla normy nuklearnej, polega na znal
 
 
 \begin{problem} \label{prob:prob1} 
-Zaimplementuj funkcję $\text{prox\_normNuc}(M, step)$ obliczającą $\prox_{\normNuc{\cdot}}^{\step}(M)$ przy $\step = \text{step}$.
+Zaimplementuj funkcję $\text{prox\_normNuc}(M, step)$ obliczającą  \\ $\prox_{\normNuc{\cdot}}^{\step}(M)$ przy $\step = \text{step}$.
 \end{problem}
 
 \newpage
@@ -132,11 +132,11 @@ gdzie $M$ to dana macierz, $\lambda$ to dany parametr a $\Omega$ to zbiór indek
 
 
 \begin{problem}
-Wykorzystując funkcję z zadania \ref{prob:prob1}, zaimplementuj algorytm proximal gradient z przyspieszeniem Nesterova i backtrackingiem dla problemu \ref{eq:prob_opt}. Algorytm można znaleźć w pracy Becka \cite{beck} , w rozdziale 4 pod nazwą "FISTA with backtracking". Napisana przez Ciebie funkcja powinna być postaci:
+Wykorzystując funkcję z zadania \ref{prob:prob1}, zaimplementuj algorytm proximal gradient z przyspieszeniem Nesterova i stałą długością kroku dla problemu \ref{eq:prob_opt}. Algorytm można znaleźć w pracy Becka \cite{beck} , w rozdziale 4 pod nazwą "FISTA with constant step size". Napisana przez Ciebie funkcja powinna być postaci:
 \[
-APG(M, lambda, start, step, beta, nsteps) 
+APG(M, lambda, start, nsteps) 
 \]
-\noindent gdzie $M$ to dana macierz z pewnymi wartościami równymi NA, lambda to dany parametr, start to dana wartość początkowa, step to początkowa długość kroku, beta to liczba z zakresu $(0,1)$ określająca tępo zminejszania długości kroku przez backtracking, nsteps to liczba kroków. Funkcja powinna zwracać wektor (lub listę) długości nsteps, którego $k$-tym elementem jest wartość optymalizowanej funkcji po $k$ krokach.
+\noindent gdzie $M$ to dana macierz z pewnymi wartościami równymi NA, lambda to dany parametr, start to dana wartość początkowa, nsteps to liczba kroków. Należy użyć optymalnej długości kroku sugerowanej przez teorię, czyli $L^{-1}$ gdzie $L$ to stała Lipshitza gradientu części gładkieg. Funkcja powinna zwracać wektor (lub listę) długości nsteps, którego $k$-tym elementem jest wartość optymalizowanej funkcji po $k$ krokach.
 
 \end{problem}
 \newpage
@@ -150,7 +150,10 @@ ADMM(M, lambda, start, rho, nsteps)
 \end{problem}
 
 \begin{problem}
-Napisz procedurę testującą napisane wcześniej funkcje. Procedura powinna wygenerować dane (można to zrobić w oddzielnej funkcji) i wywołać napisane wcześniej funkcje dla wybranych parametrów. Następnie należy zrobić wykres porównujący tempo zbieżności APG i ADMM przy użyciu zwróconych przez napisane wcześniej funkcje wektorów. Napisz kilka linijek komentarza na temat wyników przeprowadzonych eksperymentów.
+Napisz procedurę testującą napisane wcześniej funkcje. Procedura powinna wygenerować dane (można to zrobić w oddzielnej funkcji) i wywołać napisane wcześniej funkcje dla wybranych parametrów. Dane powinny być wielkości $n=30$, $p=80$, pochodzić z rozkładu normalnego. Losowa 1/3 komórek powinno być NA, ale żaden wiersz i żadna kolumna nie powinna być w całości NA.  
+Następnie procedura powinna zrobić wykres porównujący tempo zbieżności APG i ADMM przy użyciu zwróconych przez napisane wcześniej funkcje wektorów, dla wybranej ilości kroków. Parametr rho w ADMM powinien być w eksperymentach równy długości kroku w algorytmie APG. 
+
+Napisz kilka linijek komentarza na temat swoich obserwacji z  przeprowadzonych eksperymentów (w kodzie, w oddzielnym pliku, lub w e-mailu).
 \end{problem}
 
 \begin{thebibliography}{1}
